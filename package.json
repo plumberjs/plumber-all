@@ -4,7 +4,6 @@
   "description": "Pipeline grouping operation for Plumber pipelines",
   "main": "index",
   "dependencies": {
-    "plumber": "~0.1.5",
     "flatten": "0.0.1"
   },
   "scripts": {
@@ -12,7 +11,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git://github.com/theefer/plumber-all.git"
+    "url": "git://github.com/plumberjs/plumber-all.git"
   },
   "keywords": [
     "build",
@@ -23,6 +22,6 @@
   "author": "Sébastien Cevey <seb@cine7.net>",
   "license": "GPL",
   "bugs": {
-    "url": "https://github.com/theefer/plumber-all/issues"
+    "url": "https://github.com/plumberjs/plumber-all/issues"
   }
 }
