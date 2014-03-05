@@ -4,7 +4,9 @@
   "description": "Pipeline grouping operation for Plumber pipelines",
   "main": "index",
   "dependencies": {
-    "flatten": "0.0.1"
+    "plumber": "~0.3.0",
+    "flatten": "~0.0.1",
+    "highland": "~1.16.2"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
