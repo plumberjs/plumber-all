@@ -4,8 +4,8 @@
   "description": "Pipeline grouping operation for Plumber pipelines",
   "main": "index",
   "dependencies": {
-    "plumber": "git://github.com/plumberjs/plumber.git#highland",
-    "flatten": "0.0.1",
+    "plumber": "~0.3.0",
+    "flatten": "~0.0.1",
     "highland": "~1.16.2"
   },
   "scripts": {
