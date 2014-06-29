@@ -4,9 +4,10 @@
   "description": "Pipeline grouping operation for Plumber pipelines",
   "main": "index",
   "dependencies": {
-    "plumber": "~0.3.0",
-    "flatten": "~0.0.1",
-    "highland": "~1.16.2"
+    "flatten": "~0.0.1"
+  },
+  "peerDependencies": {
+    "plumber": "^0.4.0"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
