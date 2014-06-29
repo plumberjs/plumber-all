@@ -9,8 +9,15 @@
   "peerDependencies": {
     "plumber": "^0.4.0"
   },
+  "devDependencies": {
+    "plumber-util-test": "~0.4.0",
+    "mocha": "~1.16.2",
+    "chai": "~1.8.1",
+    "sinon": "~1.8.1",
+    "sinon-chai": "~2.5.0"
+  },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
