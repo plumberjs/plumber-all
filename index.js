@@ -1,27 +1,22 @@
 var assemble = require('plumber').assemble;
+var Rx = require('plumber').Rx;
 
-var highland = require('highland');
 var flatten = require('flatten');
-
-// TODO: submit to Highland?
-function zipAll(streams) {
-    return streams.reduce(highland.zip).map(function(pairs) {
-        return flatten([pairs]);
-    });
-}
 
 function all(/* operations... */) {
     var operations = [].slice.call(arguments);
+
+    if (operations.length === 0) {
+        throw new Error('All needs at least one operation');
+    }
+
     return function(executions) {
         var pipelines = operations.map(function(op) {
-            // ensure streams are forked for each listener
-            return assemble(op, executions.fork().invoke('fork'));
+            return assemble(op, executions);
         });
-        return zipAll(pipelines).map(highland.merge);
-        // TODO: or should we use parallel?
-        // return zipAll(operators).map(function(allExecutions) {
-        //   return highland(allExecutions).parallel(allExecutions.length);
-        // });
+        return Rx.Observable.zipArray(pipelines).map(function(zipped) {
+            return Rx.Observable.fromArray(zipped).mergeAll();
+        });
     };
 }
 

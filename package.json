@@ -1,15 +1,23 @@
 {
   "name": "plumber-all",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Pipeline grouping operation for Plumber pipelines",
   "main": "index",
   "dependencies": {
-    "plumber": "~0.3.0",
-    "flatten": "~0.0.1",
-    "highland": "~1.16.2"
+    "flatten": "~0.0.1"
+  },
+  "peerDependencies": {
+    "plumber": "^0.4.0"
+  },
+  "devDependencies": {
+    "plumber-util-test": "~0.4.0",
+    "mocha": "~1.16.2",
+    "chai": "~1.8.1",
+    "sinon": "~1.8.1",
+    "sinon-chai": "~2.5.0"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node_modules/.bin/mocha"
   },
   "repository": {
     "type": "git",
