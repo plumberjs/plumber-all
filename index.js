@@ -3,6 +3,16 @@ var Rx = require('plumber').Rx;
 
 var flatten = require('flatten');
 
+
+// FIXME: Copied from the RxJS source
+//   https://github.com/Reactive-Extensions/RxJS/blob/master/src/core/linq/observable/sharereplay.js
+// because it's mistakenly not packaged in Rx. This can go once the
+// related PR has been merged:
+//   https://github.com/Reactive-Extensions/RxJS/pull/196
+function shareReplay(observable, bufferSize, window, scheduler) {
+    return observable.replay(null, bufferSize, window, scheduler).refCount();
+}
+
 function all(/* operations... */) {
     var operations = [].slice.call(arguments);
 
@@ -11,8 +21,12 @@ function all(/* operations... */) {
     }
 
     return function(executions) {
+        // Inject a ReplaySubject so that the upstream pipeline isn't
+        // re-fetched (and evaluated) for each operation in this all()
+        // TODO: can we limit history size to 1?
+        var sharedExecutions = shareReplay(executions);
         var pipelines = operations.map(function(op) {
-            return assemble(op, executions);
+            return assemble(op, sharedExecutions);
         });
         return Rx.Observable.zipArray(pipelines).map(function(zipped) {
             return Rx.Observable.fromArray(zipped).mergeAll();
