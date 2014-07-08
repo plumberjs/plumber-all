@@ -84,6 +84,42 @@ describe('all', function(){
                 });
             }, resourcesError, done);
         });
+
+
+        it('should read only once from the input resources', function(done) {
+            var resource1 = new Resource({path: 'file-1.js'});
+            var resources = [resource1];
+
+            // Spy on reads from the underlying resources
+            var resourcesSpy = sinon.spy();
+            // TODO: extend runOperation to allow instrumenting,
+            // rather than copying it here.
+            var resourcesStream = Rx.Observable.fromArray(resources).do(resourcesSpy);
+            var executions = Rx.Observable.return(resourcesStream);
+            var operation = all(op1, op2);
+            var output = operation(executions);
+            var result = output.concatAll();
+
+            completeWithResources(result, function() {
+                resourcesSpy.should.have.callCount(resources.length);
+            }, resourcesError, done);
+        });
+
+
+        it('should read only once from each operation', function(done) {
+            var resource1 = new Resource({path: 'file-1.js'});
+            var resource2 = new Resource({path: 'file-2.js'});
+            var result = runOperation(all(op1, op2), [resource1]).resources;
+
+            completeWithResources(result, function() {
+                [op1, op2].forEach(function(op) {
+                    op.executions.should.have.callCount(1);
+                    op.resources.should.have.callCount(1);
+                    op.resources.should.have.been.calledWith(resource1);
+                });
+            }, resourcesError, done);
+        });
+
     });
 
 
