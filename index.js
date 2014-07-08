@@ -21,10 +21,13 @@ function all(/* operations... */) {
     }
 
     return function(executions) {
-        // Inject a ReplaySubject so that the upstream pipeline isn't
-        // re-fetched (and evaluated) for each operation in this all()
+        // Cache executions and resources so that the upstream
+        // pipeline isn't re-fetched (and evaluated) for each
+        // operation in this all().
         // TODO: can we limit history size to 1?
-        var sharedExecutions = shareReplay(executions);
+        var sharedExecutions = shareReplay(executions.map(function(resources){
+            return shareReplay(resources);
+        }));
         var pipelines = operations.map(function(op) {
             return assemble(op, sharedExecutions);
         });
