@@ -31,8 +31,10 @@ function all(/* operations... */) {
         var pipelines = operations.map(function(op) {
             return assemble(op, sharedExecutions);
         });
-        return Rx.Observable.zipArray(pipelines).map(function(zipped) {
-            return Rx.Observable.fromArray(zipped).mergeAll();
+
+        return Rx.Observable.combineLatest(pipelines, function(/* executions... */) {
+            var executions = [].slice.call(arguments);
+            return Rx.Observable.merge(executions);
         });
     };
 }

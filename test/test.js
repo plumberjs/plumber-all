@@ -20,7 +20,7 @@ function createMockOperation(mappers) {
     mappers = mappers || {};
 
     // Note: noop mock operation - return the resource unchanged
-    var op = function(executions) {
+    var op = mappers.operation || function(executions) {
         return executions.map(executionMapper);
     };
     var executionMapper = mappers.executions || sinon.spy(function(resources) {
@@ -195,4 +195,45 @@ describe('all', function(){
         });
     });
 
+    describe('when one of multiple operations fires a new execution', function() {
+        var result;
+
+
+        it('should XXX', function(done){
+            var resource1 = new Resource({path: 'file-1.js'});
+            var resource2 = new Resource({path: 'file-2.js'});
+            var resource3 = new Resource({path: 'file-3.js'});
+
+            var op1 = createMockOperation({
+                operation: function() {
+                    return Rx.Observable.merge(
+                        Rx.Observable.return(Rx.Observable.return(resource1)).delay(100),
+                        Rx.Observable.return(Rx.Observable.return(resource3)).delay(300)
+                    );
+                }
+            });
+
+            var op2 = createMockOperation({
+                executions: function() {
+                    return Rx.Observable.return(resource2).delay(200);
+                }
+            });
+
+            result = runOperation(all(op1, op2), []).executions;
+
+            completeWithResources(result, function(executions) {
+                executions.length.should.equal(2);
+                executions[0].toArray().subscribe(function(resources) {
+                    resources.length.should.equal(2);
+                    resources[0].should.equal(resource1);
+                    resources[1].should.equal(resource2);
+                }, resourcesError);
+                executions[1].toArray().subscribe(function(resources) {
+                    resources.length.should.equal(2);
+                    resources[0].should.equal(resource3);
+                    resources[1].should.equal(resource2);
+                }, resourcesError, done);
+            }, resourcesError);
+        });
+    });
 });
