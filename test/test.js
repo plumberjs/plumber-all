@@ -235,4 +235,40 @@ describe('all', function(){
             }, resourcesError);
         });
     });
+
+    describe('when a second execution hits', function() {
+        var op1, op2;
+        var output;
+
+        beforeEach(function() {
+            op1 = createMockOperation();
+            op2 = createMockOperation();
+
+            var resource1 = new Resource({path: 'file-1.js'});
+            var resource2 = new Resource({path: 'file-2.js'});
+
+            // TODO: extend runOperation to allow instrumenting,
+            // rather than copying it here.
+            var executions = Rx.Observable.concat([
+                Rx.Observable.return(Rx.Observable.return(resource1)),
+                Rx.Observable.return(Rx.Observable.return(resource2)).delay(100)
+            ]);
+            var operation = all(op1, op2);
+            output = operation(executions);
+        });
+
+        it('should only output a single executions', function(done){
+            output.toArray().subscribe(function(execs) {
+                execs.length.should.equal(2);
+            }, resourcesError, done);
+        });
+
+        it('should only fire each operation once', function(done){
+            output.toArray().subscribe(function(execs) {
+                [op1, op2].forEach(function(op) {
+                    op.executions.should.have.callCount(2);
+                });
+            }, resourcesError, done);
+        });
+    });
 });
