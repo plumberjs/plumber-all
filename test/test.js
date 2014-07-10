@@ -198,8 +198,7 @@ describe('all', function(){
     describe('when one of multiple operations fires a new execution', function() {
         var result;
 
-
-        it('should XXX', function(done){
+        it('should re-combine the new resource with the previous resource from the non-firing operation', function(done){
             var resource1 = new Resource({path: 'file-1.js'});
             var resource2 = new Resource({path: 'file-2.js'});
             var resource3 = new Resource({path: 'file-3.js'});
