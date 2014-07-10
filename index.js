@@ -13,6 +13,10 @@ function shareReplay(observable, bufferSize, window, scheduler) {
     return observable.replay(null, bufferSize, window, scheduler).refCount();
 }
 
+function splatArguments() {
+    return [].slice.call(arguments);
+}
+
 function all(/* operations... */) {
     var operations = [].slice.call(arguments);
 
@@ -32,10 +36,12 @@ function all(/* operations... */) {
             return assemble(op, sharedExecutions);
         });
 
-        return Rx.Observable.combineLatest(pipelines, function(/* executions... */) {
-            var executions = [].slice.call(arguments);
-            return Rx.Observable.merge(executions);
-        });
+        // Combine all pipelines into an Observable of Observable executions
+        return Rx.Observable.combineLatest(pipelines, splatArguments).
+            // Required to merge duplicates (one for each op)...
+            throttle(0).
+            // Flatten to executions as an Observable
+            map(Rx.Observable.merge);
     };
 }
 
