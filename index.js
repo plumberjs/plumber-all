@@ -1,8 +1,6 @@
 var assemble = require('plumber').assemble;
 var Rx = require('plumber').Rx;
 
-var flatten = require('flatten');
-
 
 function all(/* operations... */) {
     var operations = [].slice.call(arguments);

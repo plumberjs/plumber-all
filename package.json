@@ -3,15 +3,11 @@
   "version": "0.4.3",
   "description": "Pipeline grouping operation for Plumber pipelines",
   "main": "index",
-  "dependencies": {
-    "flatten": "~0.0.1"
-  },
   "peerDependencies": {
     "plumber": "^0.4.0"
   },
   "devDependencies": {
     "chai": "^1.10.0",
-    "flatten": "0.0.1",
     "mocha": "~1.16.2",
     "plumber": "^0.4.9",
     "plumber-util-test": "^0.4.1",
