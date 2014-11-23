@@ -10,11 +10,13 @@
     "plumber": "^0.4.0"
   },
   "devDependencies": {
-    "plumber-util-test": "~0.4.0",
+    "chai": "^1.10.0",
+    "flatten": "0.0.1",
     "mocha": "~1.16.2",
-    "chai": "~1.8.1",
-    "sinon": "~1.8.1",
-    "sinon-chai": "~2.5.0"
+    "plumber": "^0.4.8",
+    "plumber-util-test": "^0.4.1",
+    "sinon": "^1.12.1",
+    "sinon-chai": "^2.6.0"
   },
   "scripts": {
     "test": "node_modules/.bin/mocha"
