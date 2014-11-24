@@ -21,7 +21,7 @@ function all(/* operations... */) {
             return assemble(op, sharedExecutions);
         });
 
-        return Rx.Observable.zip.apply(this, pipelines.concat(Rx.Observable.merge))
+        return Rx.Observable.zip.apply(this, pipelines.concat(Rx.Observable.concat))
     };
 }
 
