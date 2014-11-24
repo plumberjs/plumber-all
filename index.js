@@ -21,10 +21,7 @@ function all(/* operations... */) {
             return assemble(op, sharedExecutions);
         });
 
-        return Rx.Observable.combineLatest(pipelines, function(/* executions... */) {
-            var executions = [].slice.call(arguments);
-            return Rx.Observable.merge(executions);
-        });
+        return Rx.Observable.zip.apply(this, pipelines.concat(Rx.Observable.merge))
     };
 }
 
