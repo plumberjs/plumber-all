@@ -214,8 +214,11 @@ describe('all', function(){
             });
 
             var op2 = createMockOperation({
-                executions: function() {
-                    return Rx.Observable.return(resource2).delay(200);
+                operation: function() {
+                    return Rx.Observable.merge(
+                        Rx.Observable.return(Rx.Observable.return(resource2)).delay(200),
+                        Rx.Observable.return(Rx.Observable.return(resource2)).delay(300)
+                    );
                 }
             });
 
