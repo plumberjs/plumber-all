@@ -33,6 +33,8 @@ function all(/* operations... */) {
 
         // Combine all pipelines into an Observable of Observable executions
         return Rx.Observable.combineLatest(pipelines, splatArguments).
+            // Required to merge duplicates (one for each op)...
+            throttle(0).
             // Flatten to executions as an Observable
             map(Rx.Observable.merge);
     };
