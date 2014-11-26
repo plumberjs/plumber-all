@@ -26,7 +26,9 @@ function all(/* operations... */) {
         var pipelines = operations.map(function(op) {
             // Cache operation output so that it can be re-read by the
             // combineLatest if another operation fires
-            return assemble(op, sharedExecutions).shareReplay();
+            return assemble(op, sharedExecutions).map(function(resources) {
+                return resources.shareReplay();
+            });
         });
 
         // Combine all pipelines into an Observable of Observable executions
